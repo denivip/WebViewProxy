@@ -137,6 +137,7 @@ static NSString *const WebViewProxyLoopDetectionPropertyKey = @"WebViewProxyLoop
 }
 - (void)pipeResponse:(NSURLResponse *)response cachingAllowed:(BOOL)cachingAllowed {
     if (_stopped) { return; }
+    self.response = response;
     NSURLCacheStoragePolicy cachePolicy = cachingAllowed ? NSURLCacheStorageAllowed : NSURLCacheStorageNotAllowed;
     [_protocol.client URLProtocol:_protocol didReceiveResponse:response cacheStoragePolicy:cachePolicy];
 }
@@ -146,6 +147,10 @@ static NSString *const WebViewProxyLoopDetectionPropertyKey = @"WebViewProxyLoop
 }
 - (void)pipeEnd {
     if (_stopped) { return; }
+    if (self.willFinishLoadingBlock) {
+        self.willFinishLoadingBlock();
+        self.willFinishLoadingBlock = nil;
+    }
     [_protocol.client URLProtocolDidFinishLoading:_protocol];
 }
 - (void)pipeError:(NSError *)error {

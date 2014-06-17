@@ -19,6 +19,8 @@ typedef void (^StopLoadingHandler)();
 - (void) respondWithHTML:(NSString*)html;
 - (void) respondWithJSON:(NSDictionary*)jsonObject;
 - (void) handleStopLoadingRequest:(StopLoadingHandler)stopLoadingHandler;
+@property (copy, nonatomic) void (^willFinishLoadingBlock)();
+@property (strong, nonatomic) NSURLResponse *response;
 // Low level API
 - (void) setHeader:(NSString*)headerName value:(NSString*)headerValue;
 - (void) setHeaders:(NSDictionary*)headers;
